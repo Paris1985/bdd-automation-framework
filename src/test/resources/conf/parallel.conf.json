@@ -1,0 +1,25 @@
+{
+  "capabilities": {
+    "options": {
+      "buildName": "build-1",
+      "sessionName": "parallel cucumber-java",
+      "browserVersion": "latest",
+      "debug": true
+    }
+  },
+
+  "environments": [
+    {
+      "browserName": "chrome"
+    },
+    {
+      "browserName": "firefox"
+    },
+    {
+      "options": {
+        "os": "OS X"
+      },
+      "browserName": "safari"
+    }
+  ]
+}

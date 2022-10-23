@@ -1,0 +1,16 @@
+{
+  "capabilities": {
+    "options": {
+      "buildName": "build-1",
+      "sessionName": "single cucumber-java",
+      "browserVersion": "latest",
+      "debug": true
+    }
+  },
+
+  "environments": [
+    {
+      "browserName": "chrome"
+    }
+  ]
+}
