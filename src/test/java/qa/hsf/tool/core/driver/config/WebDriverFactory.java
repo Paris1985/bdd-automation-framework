@@ -98,7 +98,8 @@ public class WebDriverFactory {
 
             MutableCapabilities caps = new MutableCapabilities(platform);
             caps.setCapability("name", "[" + platform.get("browserName") + "] " + testName);
-            URL url = new URL("http://" + username + ":" + accessKey + "@" + server + "/wd/hub");
+            logger.info("http://"  + "{}" + "/wd/hub", server);
+            URL url = new URL("http://"  + server + "/wd/hub");
 
             return new RemoteWebDriver(url, caps);
         } catch (MalformedURLException var4) {

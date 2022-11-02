@@ -16,11 +16,11 @@ public class LazyInitWebDriverIterator implements Iterator<Object[]> {
         this.platforms = WebDriverFactory.getInstance().getPlatforms();
         List<Object[]> testParamsList = new ArrayList();
         if (testParams != null) {
-            testParamsList = (List)Arrays.stream(testParams).collect(Collectors.toList());
+            testParamsList = Arrays.stream(testParams).collect(Collectors.toList());
         }
 
         //Create list of combinations of Scenarios and Platforms
-        this.testParams = this.populateTestParams((List)testParamsList);
+        this.testParams = this.populateTestParams(testParamsList);
     }
 
     private List<Object[]> populateTestParams(List<Object[]> testParams) {
@@ -28,7 +28,7 @@ public class LazyInitWebDriverIterator implements Iterator<Object[]> {
         ArrayList tempTestParams = new ArrayList();
 
         do {
-            Object[] testParam = (Object[])testParams.get(index);
+            Object[] testParam = testParams.get(index);
             if (testParam == null) {
                 testParam = new Object[0];
             }
@@ -47,11 +47,12 @@ public class LazyInitWebDriverIterator implements Iterator<Object[]> {
 
         return tempTestParams;
     }
-
+    @Override
     public boolean hasNext() {
         return this.paramIndex < this.testParams.size();
     }
 
+    @Override
     public Object[] next() {
         if (this.paramIndex >= this.testParams.size()) {
             throw new NoSuchElementException("No More Platforms configured to create WebDriver for.");
