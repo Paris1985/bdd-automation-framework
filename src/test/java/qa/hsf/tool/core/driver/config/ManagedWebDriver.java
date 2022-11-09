@@ -19,20 +19,11 @@ public class ManagedWebDriver {
         this.testName = testName;
     }
 
-    public JSONObject getPlatform() {
-        return this.platform;
-    }
-
     public WebDriver getWebDriverForPlatform() {
         if (this.webDriver == null) {
             this.webDriver = this.webDriverFactory.createWebDriverForPlatform(this.platform, this.testName);
         }
         return this.webDriver;
     }
-    public WebDriver getWebDriver() {
-        if (this.webDriver == null) {
-            this.webDriver = this.webDriverFactory.createWebDriver();
-        }
-        return this.webDriver;
-    }
+
 }

@@ -4,6 +4,8 @@ import io.cucumber.testng.CucumberOptions;
 import io.cucumber.testng.FeatureWrapper;
 import io.cucumber.testng.PickleWrapper;
 import io.cucumber.testng.TestNGCucumberRunner;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
@@ -34,6 +36,10 @@ public class RemoteCucumberTestRunner {
     @BeforeClass(alwaysRun = true)
     public void setUpClass() {
         testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
+    }
+    public static WebDriver getWebDriver() {
+
+        return WebDriverManager.getInstance("chrome").create();
     }
 
     private synchronized static void setThreadLocalWebDriver(ManagedWebDriver managedWebDriver) {

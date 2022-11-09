@@ -138,7 +138,7 @@
                         <version>3.0.0-M5</version>
                         <configuration>
                             <suiteXmlFiles>
-                                <suiteXmlFile>src/test/resources/testng-local.xml</suiteXmlFile>
+                                <suiteXmlFile>src/test/resources/testng-remote.xml</suiteXmlFile>
                             </suiteXmlFiles>
                             <systemPropertyVariables>
                                 <cucumber.publish.quiet>true</cucumber.publish.quiet>
@@ -218,7 +218,7 @@
                                 <suiteXmlFile>src/test/resources/testng-remote.xml</suiteXmlFile>
                             </suiteXmlFiles>
                             <argLine>
-                                -Ddataproviderthreadcount=1
+                                -Ddataproviderthreadcount=10
                             </argLine>
                             <systemPropertyVariables>
                                 <caps>src/test/resources/conf/single.conf.json</caps>

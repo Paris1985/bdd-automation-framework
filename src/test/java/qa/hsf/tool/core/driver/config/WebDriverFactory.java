@@ -1,6 +1,7 @@
 package qa.hsf.tool.core.driver.config;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.bonigarcia.wdm.config.WebDriverManagerException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,10 +24,11 @@ import java.util.Map;
 
 public class WebDriverFactory {
 
-    private static final String DEFAULT_LOCAL_BROWSER = "edge";
+    private static final String DEFAULT_LOCAL_BROWSER = "chrome";
     private static volatile WebDriverFactory instance;
     private final JSONObject testConfig = this.parseWebDriverConfig();
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private List<String> supportedBrowsers = new ArrayList<>();
 
     private WebDriverFactory() {
     }
@@ -92,22 +94,41 @@ public class WebDriverFactory {
                 server = System.getProperty("server");
             }
 
-            if(server == null || accessKey == null || username == null) {
-                throw new InvalidArgumentException("Required server details are not provided");
-            }
-
             MutableCapabilities caps = new MutableCapabilities(platform);
+            logger.info("ito na {}", caps);
             caps.setCapability("name", "[" + platform.get("browserName") + "] " + testName);
-            logger.info("http://"  + "{}" + "/wd/hub", server);
-            URL url = new URL("http://"  + server + "/wd/hub");
+            boolean remote = false;
+            WebDriver webDriver = null;
+            if(remote){
 
-            return new RemoteWebDriver(url, caps);
+                if(server == null || accessKey == null || username == null) {
+                    throw new InvalidArgumentException("Required server details are not provided");
+                }
+
+                StringBuilder urlBuilder = new StringBuilder();
+
+                urlBuilder.append("https://")
+                        .append(username)
+                        .append(":")
+                        .append(accessKey)
+                        .append("@")
+                        .append(server)
+                        .append("/wd/hub");
+                webDriver = new RemoteWebDriver(new URL(urlBuilder.toString()), caps);
+            }else {
+                webDriver = WebDriverManager.getInstance((String) platform.get("browserName")).create();
+            }
+            return webDriver;
         } catch (MalformedURLException var4) {
             throw new Error("Unable to create WebDriver", var4);
+        } catch (WebDriverManagerException e){
+            logger.warn("Browser {} is not supported", platform.get("browserName"));
+            logger.warn("Using default browser {}", DEFAULT_LOCAL_BROWSER);
+            return createDefaultWebDriver();
         }
     }
 
-    public WebDriver createWebDriver() {
+    public WebDriver createDefaultWebDriver() {
         String browser = System.getProperty("browser");
         if (browser != null)
             verify(browser);
