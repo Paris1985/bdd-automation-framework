@@ -29,11 +29,16 @@
 * You can view your test results on the 
   * [BrowserStack dashboard](https://www.browserstack.com/automate)
   * [Sauce-labs dashboard](https://app.eu-central-1.saucelabs.com/dashboard)
-* You can export the environment variables for the Username and Access Key of your BrowserStack account. 
+* You can export the environment variables for the Username and Access Key of your Saucelabs or BrowserStack account. 
 
   ```
   export QA_USERNAME=<username> &&
   export QA_ACCESS_KEY=<access-key>
+  export QA_SERVER=<server>
+  ```
+* Or you can provide it as properties during the run
+  ```
+  mvn clean test -P sauce-labs-parallel -Duser=<username> -Dkey=<access-key> -Dserver=<server>
   ```
 
 ## Addtional Resources

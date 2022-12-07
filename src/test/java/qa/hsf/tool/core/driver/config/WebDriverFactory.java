@@ -55,6 +55,10 @@ public class WebDriverFactory {
         }
     }
 
+    public JSONObject getTestConfig() {
+        return testConfig;
+    }
+
     public List<JSONObject> getPlatforms() {
         Object environments1 = testConfig.get("environments");
         List<JSONObject> platforms = new ArrayList<>();
@@ -89,21 +93,30 @@ public class WebDriverFactory {
             }
 
             String server = System.getenv("QA_SERVER");
-            if(server == null) {
+            if (server == null) {
                 logger.info("server was not setup in environment");
                 server = System.getProperty("server");
             }
 
             MutableCapabilities caps = new MutableCapabilities(platform);
-            logger.info("ito na {}", caps);
             caps.setCapability("name", "[" + platform.get("browserName") + "] " + testName);
-            boolean remote = false;
-            WebDriver webDriver = null;
-            if(remote){
 
-                if(server == null || accessKey == null || username == null) {
-                    throw new InvalidArgumentException("Required server details are not provided");
+            WebDriver webDriver = null;
+            String runType = System.getProperty("run");
+            logger.info("Run type is {}", runType);
+            if(runType == null) {
+                logger.info("Setting run type to null");
+                runType = "local";
+            }
+
+            if(runType.equals("local")) {
+                if (platform.isEmpty()) {
+                    webDriver = createDefaultWebDriver();
+                } else {
+                    webDriver = WebDriverManager.getInstance((String) platform.get("browserName")).create();
                 }
+                return webDriver;
+            } else if (server != null && accessKey != null && username != null) {
 
                 StringBuilder urlBuilder = new StringBuilder();
 
@@ -115,13 +128,13 @@ public class WebDriverFactory {
                         .append(server)
                         .append("/wd/hub");
                 webDriver = new RemoteWebDriver(new URL(urlBuilder.toString()), caps);
-            }else {
-                webDriver = WebDriverManager.getInstance((String) platform.get("browserName")).create();
+            }else{
+                logger.error("not supported configuration");
             }
             return webDriver;
         } catch (MalformedURLException var4) {
             throw new Error("Unable to create WebDriver", var4);
-        } catch (WebDriverManagerException e){
+        } catch (WebDriverManagerException e) {
             logger.warn("Browser {} is not supported", platform.get("browserName"));
             logger.warn("Using default browser {}", DEFAULT_LOCAL_BROWSER);
             return createDefaultWebDriver();
@@ -132,7 +145,7 @@ public class WebDriverFactory {
         String browser = System.getProperty("browser");
         if (browser != null)
             verify(browser);
-        else{
+        else {
             logger.warn("Browser not provided, setting default browser to " + DEFAULT_LOCAL_BROWSER);
             browser = DEFAULT_LOCAL_BROWSER;
         }

@@ -14,6 +14,11 @@ public class ManagedWebDriver {
         this.platform = platform;
         this.webDriverFactory = WebDriverFactory.getInstance();
     }
+    public ManagedWebDriver(String testMethodName) {
+        this.testName = testMethodName;
+        this.webDriverFactory = WebDriverFactory.getInstance();
+        this.platform = webDriverFactory.getTestConfig();
+    }
 
     public void setTestName(String testName) {
         this.testName = testName;

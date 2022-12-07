@@ -12,8 +12,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import qa.hsf.tool.core.driver.config.LazyInitWebDriverIterator;
 import qa.hsf.tool.core.driver.config.ManagedWebDriver;
+import qa.hsf.tool.core.driver.config.WebDriverIterator;
 
 import java.util.Iterator;
 
@@ -28,7 +28,7 @@ import java.util.Iterator;
                 "json:reports/tests/cucumber/json/cucumber.json"
         }
 )
-public class RemoteCucumberTestRunner {
+public class CucumberTestRunner {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private TestNGCucumberRunner testNGCucumberRunner;
     private static final ThreadLocal<ManagedWebDriver> threadLocalWebDriver = new ThreadLocal<>();
@@ -42,7 +42,7 @@ public class RemoteCucumberTestRunner {
         return WebDriverManager.getInstance("chrome").create();
     }
 
-    private synchronized static void setThreadLocalWebDriver(ManagedWebDriver managedWebDriver) {
+    public synchronized static void setThreadLocalWebDriver(ManagedWebDriver managedWebDriver) {
         threadLocalWebDriver.set(managedWebDriver);
     }
 
@@ -62,7 +62,7 @@ public class RemoteCucumberTestRunner {
     public Iterator<Object[]> scenarios() {
         Object[][] scenarios = testNGCucumberRunner.provideScenarios();
         logger.info("scenarios {}", scenarios);
-        return new LazyInitWebDriverIterator(scenarios);
+        return new WebDriverIterator(scenarios);
     }
 
     @AfterClass(alwaysRun = true)

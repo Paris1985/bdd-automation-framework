@@ -5,13 +5,13 @@ import org.json.simple.JSONObject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LazyInitWebDriverIterator implements Iterator<Object[]> {
+public class WebDriverIterator implements Iterator<Object[]> {
     private final String testMethodName;
     private final List<JSONObject> platforms;
     private final List<Object[]> testParams;
     private int paramIndex = 0;
 
-    public LazyInitWebDriverIterator(Object[][] testParams) {
+    public WebDriverIterator(Object[][] testParams) {
         this.testMethodName = "";
         this.platforms = WebDriverFactory.getInstance().getPlatforms();
         List<Object[]> testParamsList = new ArrayList();

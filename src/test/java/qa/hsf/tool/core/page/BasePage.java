@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -25,6 +26,10 @@ public abstract class BasePage {
         PageFactory.initElements(this.driver, this);
     }
 
+    public <T> void navigate(String url) {
+        driver.get(url);
+        this.driver.manage().window().maximize();
+    }
     public <T> void waitElement(T elementAttr) {
         if (elementAttr
                 .getClass()
@@ -60,6 +65,14 @@ public abstract class BasePage {
             ((WebElement) elementAttr).click();
         }
     }
+    public <T> void dragAndDrop(T draggableAttr, T droppableAttr){
+        waitElement(draggableAttr);
+        waitElement(droppableAttr);
+
+        Actions builder = new Actions(driver);
+        builder.dragAndDrop((WebElement) draggableAttr, (WebElement) droppableAttr).perform();
+    }
+
     public <T> void writeText(T elementAttr, String text) {
         waitElement(elementAttr);
         if (elementAttr
@@ -102,10 +115,10 @@ public abstract class BasePage {
             return ((WebElement) elementAttr).getText();
         }
     }
- /*   public void jsClick(By by) {
+    public void jsClick(By by) {
         javascriptExecutor.executeScript("arguments[0].click();", wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
     }
     public void executeScript(String js, By by) {
         javascriptExecutor.executeScript(js, wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-    }*/
+    }
 }

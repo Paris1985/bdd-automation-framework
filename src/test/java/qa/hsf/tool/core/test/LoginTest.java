@@ -1,11 +1,15 @@
 package qa.hsf.tool.core.test;
 
-import org.junit.Test;
 import qa.hsf.tool.core.steps.LoginSteps;
 
-public class LoginTest {
+public class LoginTest extends BaseTest{
+  /*  @Before
+    public void init() {
+        ManagedWebDriver managedWebDriver = new ManagedWebDriver("test", new JSONObject());
+        RemoteCucumberTestRunner.setThreadLocalWebDriver(managedWebDriver);
+    }*/
 
-    @Test
+    //@Test
     public void shouldBeAbleToLogin() {
         //Given
         LoginSteps loginSteps = new LoginSteps();

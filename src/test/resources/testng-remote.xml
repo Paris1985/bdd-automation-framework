@@ -3,7 +3,7 @@
 <suite name="BDD Test Suite" verbose="1">
     <test name="Cucumber Tests">
         <classes>
-            <class name="qa.hsf.tool.RemoteCucumberTestRunner" />
+            <class name="qa.hsf.tool.CucumberTestRunner" />
         </classes>
     </test>
 </suite>
